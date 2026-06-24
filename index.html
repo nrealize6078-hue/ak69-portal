@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Shippori+Mincho+B1:wght@600;800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:#000;}
+  ::-webkit-scrollbar{width:0;height:0;}
+  @keyframes akGlow{0%,100%{opacity:.5;}50%{opacity:1;}}
+  @keyframes akHint{0%{transform:translateY(0);opacity:.9;}50%{transform:translateY(8px);opacity:.3;}100%{transform:translateY(0);opacity:.9;}}
+  @keyframes akMarq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes akPulse{0%,100%{box-shadow:0 0 0 0 var(--glow,rgba(255,45,45,.5));}50%{box-shadow:0 0 0 9px rgba(255,45,45,0);}}
+  @keyframes akRise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes introVeil{0%,82%{opacity:1;}100%{opacity:0;visibility:hidden;}}
+  @keyframes fadeVeil{0%{opacity:1;}100%{opacity:0;visibility:hidden;}}
+  @keyframes strobeRed{0%,4%{opacity:0;}9%{opacity:.5;}12%{opacity:0;}30%{opacity:.55;}34%{opacity:0;}60%{opacity:.3;}66%{opacity:0;}100%{opacity:0;}}
+  @keyframes introHero{0%{opacity:0;transform:scale(1.08);}100%{opacity:1;transform:scale(1);}}
+  @keyframes introCopy{0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);}}
+  @keyframes radarDraw{from{stroke-dashoffset:600;}to{stroke-dashoffset:0;}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#000;display:flex;justify-content:center;align-items:flex-start;font-family:'Noto Sans JP',sans-serif;overflow-x:hidden;">
+<div style="{{ rootStyle }}">
+<div style="position:relative;width:440px;min-height:100vh;background:#070707;overflow:hidden;box-shadow:0 0 120px rgba(0,0,0,.9);padding-bottom:118px;zoom:{{ frameZoom }};">
+
+  <!-- ambient -->
+  <div style="position:fixed;inset:0;pointer-events:none;z-index:60;background:radial-gradient(120% 80% at 50% -10%, rgba(0,0,0,0) 40%, rgba(0,0,0,.5) 100%);mix-blend-mode:multiply;"></div>
+  <div style="position:fixed;inset:0;pointer-events:none;z-index:61;opacity:.045;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');"></div>
+
+  <!-- intro: フェードイン -->
+  <sc-if value="{{ introActive }}" hint-placeholder-val="{{ true }}">
+  <div style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;height:100%;z-index:100;pointer-events:none;background:#000;animation:fadeVeil 1.1s ease-out 0.05s forwards;"></div>
+  </sc-if>
+
+  <!-- header (fixed) -->
+  <div style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:65;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(7,7,7,.86);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);">
+    <div style="display:flex;align-items:center;flex:none;">
+      <div onClick="{{ openMenu }}" style="width:36px;height:36px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:1px solid rgba(255,255,255,.12);border-radius:0;background:rgba(255,255,255,.03);">
+        <div style="width:17px;height:2px;border-radius:0;background:#fff;"></div>
+        <div style="width:17px;height:2px;border-radius:0;background:var(--accent,#FF2D2D);"></div>
+        <div style="width:17px;height:2px;border-radius:0;background:#fff;"></div>
+      </div>
+    </div>
+    <img src="assets/ak-crest.png" alt="AK LIFE STUDIO" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:54px;width:auto;display:block;filter:contrast(1.12) saturate(1.1) drop-shadow(0 0 6px rgba(255,255,255,.9)) drop-shadow(0 0 16px rgba(255,255,255,.6)) drop-shadow(0 0 30px rgba(255,255,255,.35));">
+    <div style="display:flex;align-items:center;gap:11px;">
+      <div style="position:relative;width:22px;height:22px;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;">♪<div style="position:absolute;top:-1px;right:-1px;width:6px;height:6px;border-radius:50%;background:var(--accent,#FF2D2D);"></div></div>
+      <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#333,#111);border:1px solid var(--line,rgba(255,45,45,.4));"></div>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section id="home" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:#070707;scroll-margin-top:54px;">
+    <div style="position:relative;width:100%;aspect-ratio:1.55;overflow:hidden;">
+      <img src="assets/hero-ak.jpg" alt="AK-69 LIVE" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0%;animation:introHero 1.3s ease-out 0.05s both;">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,5,5,.42) 0%, rgba(5,5,5,.04) 30%, rgba(5,5,5,.04) 62%, rgba(5,5,5,.78) 90%, #070707 100%);z-index:2;"></div>
+    </div>
+
+    <!-- ステータスバー（顎下に密着） -->
+    <div style="position:relative;z-index:6;margin-top:-28px;padding:0 12px;display:flex;flex-direction:column;gap:9px;animation:introCopy 1.5s ease-out 0.35s both;">
+      <div style="display:flex;gap:9px;">
+        <div style="flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1.5px solid var(--line,rgba(255,45,45,.5));background:rgba(7,7,7,.62);backdrop-filter:blur(8px);padding:7px 13px;">
+          <div style="font-family:'Oswald';font-weight:700;font-size:8px;letter-spacing:.2em;color:var(--accent,#FF2D2D);">LOGIN</div>
+          <div style="font-family:'Anton';font-size:26px;color:#fff;line-height:.92;">{{ streak }}</div>
+          <div style="font-family:'Oswald';font-size:8px;letter-spacing:.16em;color:#cfcfcf;">DAYS</div>
+        </div>
+        <div style="flex:1;min-width:0;display:flex;align-items:center;gap:11px;border:1px solid rgba(255,255,255,.16);background:rgba(7,7,7,.62);backdrop-filter:blur(8px);padding:9px 13px;">
+          <img src="assets/hustler-badge-cut.png" alt="AK69 HUSTLER" style="height:52px;width:auto;flex:none;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'Oswald';font-weight:600;font-size:8px;letter-spacing:.18em;color:#cfcfcf;">CURRENT RANK</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:1px;">
+              <div style="font-family:'Anton';font-size:17px;color:#fff;line-height:1.05;">HUSTLER</div>
+            </div>
+            <div style="height:4px;background:rgba(255,255,255,.14);margin-top:6px;overflow:hidden;"><div style="width:65%;height:100%;background:var(--accent,#FF2D2D);box-shadow:0 0 8px var(--glow,rgba(255,45,45,.6));"></div></div>
+          </div>
+        </div>
+      </div>
+      <a href="#shop" style="text-decoration:none;display:flex;align-items:center;gap:11px;border:1px solid var(--line,rgba(255,45,45,.5));background:linear-gradient(135deg,rgba(34,10,10,.78),rgba(7,7,7,.7));backdrop-filter:blur(8px);padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.45);">
+        <div style="width:34px;height:34px;flex:none;border-radius:50%;background:var(--accent,#FF2D2D);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;box-shadow:0 0 12px var(--glow,rgba(255,45,45,.6));">▶</div>
+        <div style="flex:1;min-width:0;font-size:11px;line-height:1.5;color:#fff;">次の階級 <span style="color:var(--accent,#FF2D2D);font-weight:700;">BOSS</span> に昇格で、<span style="font-weight:700;">サイン入りTシャツ</span>が解放されます。</div>
+        <div style="flex:none;font-size:14px;">🔒</div>
+      </a>
+    </div>
+    <div style="position:relative;z-index:5;padding:14px 22px 30px;animation:introCopy 1.4s ease-out 0.2s both;">
+      <img src="assets/enlight-wordmark.png" alt="AK ENLIGHTMENT CLUB" style="width:220px;max-width:62%;height:auto;display:block;margin:0 0 16px;filter:drop-shadow(0 0 8px rgba(255,255,255,.8)) drop-shadow(0 0 20px rgba(255,255,255,.5)) drop-shadow(0 1px 3px rgba(0,0,0,.6));">
+      <h1 style="margin:0;font-family:'Anton';font-size:46px;line-height:.96;letter-spacing:-.01em;color:#fff;text-shadow:0 0 36px var(--glow,rgba(255,45,45,.5));">何度でも、<br><span style="color:var(--accent,#FF2D2D);">這い上がれ。</span></h1>
+      <p style="margin:16px 0 22px;font-size:12.5px;line-height:1.9;color:#fff;">AK-69のクラブへようこそ。<br>成り上がりの哲学・覚悟・ハングリー精神を学び、<br>このクラブで自分の人生を整える。<br>次のビートを、ここで鳴らそう。</p>
+      <a href="#message" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.08em;color:#fff;background:var(--accent,#FF2D2D);padding:14px 22px;border-radius:0;box-shadow:0 12px 30px var(--glow,rgba(255,45,45,.5));">AK-69からのメッセージを見る <span style="font-size:16px;">→</span></a>
+    </div>
+  </section>
+
+  <!-- quick actions -->
+  <section style="padding:20px 18px 6px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;">
+      <a href="#club" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:17px 15px;background:linear-gradient(135deg,rgba(255,45,45,.22),rgba(255,45,45,.06));box-shadow:0 6px 20px rgba(255,45,45,.16);"><div style="font-family:'Oswald';font-weight:700;font-size:13.5px;letter-spacing:.02em;color:#fff;">人生を整える</div><span style="font-family:'Anton';font-size:14px;color:var(--accent,#FF2D2D);">›</span></a>
+      <a href="#train" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:17px 15px;background:linear-gradient(135deg,rgba(255,45,45,.22),rgba(255,45,45,.06));box-shadow:0 6px 20px rgba(255,45,45,.16);"><div style="font-family:'Oswald';font-weight:700;font-size:13.5px;letter-spacing:.02em;color:#fff;">学びで成長する</div><span style="font-family:'Anton';font-size:14px;color:var(--accent,#FF2D2D);">›</span></a>
+      <a href="#check" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:17px 15px;background:linear-gradient(135deg,rgba(255,45,45,.22),rgba(255,45,45,.06));box-shadow:0 6px 20px rgba(255,45,45,.16);"><div style="font-family:'Oswald';font-weight:700;font-size:13.5px;letter-spacing:.02em;color:#fff;">人生診断を始める</div><span style="font-family:'Anton';font-size:14px;color:var(--accent,#FF2D2D);">›</span></a>
+      <div onClick="{{ openCoach }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--accent,#FF2D2D);border-radius:0;padding:17px 15px;background:var(--accent,#FF2D2D);box-shadow:0 8px 24px var(--glow,rgba(255,45,45,.5));"><div style="font-family:'Oswald';font-weight:700;font-size:13.5px;letter-spacing:.02em;color:#fff;">AK-69に相談</div><span style="font-family:'Anton';font-size:14px;color:#fff;">›</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 会員ライセンス / 会員証 ===== -->
+  <section style="padding:22px 18px 6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">MEMBER LICENSE ─ 会員ライセンス</div>
+      <div style="font-family:'Oswald';font-size:9px;letter-spacing:.2em;color:var(--accent,#FF2D2D);">★ ALL ACCESS</div>
+    </div>
+    <div style="position:relative;overflow:hidden;border:1.5px solid var(--line,rgba(255,45,45,.4));box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 22px rgba(255,45,45,.14),inset 0 0 0 1px rgba(255,255,255,.04);clip-path:polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));background:repeating-linear-gradient(115deg, rgba(255,255,255,.04) 0 2px, rgba(0,0,0,0) 2px 6px), linear-gradient(135deg,#27272b,#0a0a0c 58%,#151517);">
+      <!-- hazard top strip -->
+      <div style="height:7px;background:repeating-linear-gradient(45deg, var(--accent,#FF2D2D) 0 9px, #111 9px 18px);"></div>
+      <!-- rivets -->
+      <div style="position:absolute;top:17px;left:13px;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ddd,#555);box-shadow:0 0 3px #000;"></div>
+      <div style="position:absolute;bottom:13px;left:13px;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ddd,#555);box-shadow:0 0 3px #000;"></div>
+
+      <div style="position:relative;padding:15px 17px 16px;">
+        <div style="position:absolute;top:-34%;right:-8%;width:160px;height:160px;border-radius:50%;background:var(--glow,rgba(255,45,45,.5));opacity:.22;filter:blur(40px);"></div>
+        <img src="assets/ak-crest.png" alt="AK LIFE STUDIO" style="position:relative;height:42px;width:auto;display:block;margin-bottom:12px;filter:drop-shadow(0 0 6px rgba(255,255,255,.55)) drop-shadow(0 1px 3px rgba(0,0,0,.6));">
+        <div style="position:relative;display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.2em;color:var(--accent,#FF2D2D);">AK LIFE STUDIO ・ STAGE PASS</div>
+            <div style="font-family:'Anton';font-size:27px;color:#fff;line-height:1;margin-top:6px;text-shadow:0 2px 0 rgba(0,0,0,.55);">山田 太郎</div>
+            <div style="font-family:'Oswald';font-size:9.5px;letter-spacing:.05em;color:#fff;margin-top:4px;">No. 0001-0427 ・ SINCE 2024</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.18em;color:#fff;">RANK</div>
+            <div style="font-family:'Anton';font-size:22px;line-height:1;white-space:nowrap;background:linear-gradient(180deg,#fff,#c6c6c6 52%,#6e6e6e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 8px var(--glow,rgba(255,45,45,.5)));">HUSTLER</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;font-family:'Oswald';font-size:9px;letter-spacing:.06em;color:#fff;margin-bottom:6px;"><span>NEXT ─ BOSS</span><span style="color:#fff;">65%</span></div>
+          <div style="height:9px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);overflow:hidden;"><div style="width:65%;height:100%;background:repeating-linear-gradient(90deg, var(--accent,#FF2D2D) 0 7px, rgba(0,0,0,.35) 7px 9px);box-shadow:0 0 12px var(--glow,rgba(255,45,45,.5));"></div></div>
+        </div>
+
+        <div style="display:flex;margin-top:16px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);">
+          <div style="flex:1;padding:11px 0;text-align:center;border-right:1px solid rgba(255,255,255,.06);"><div style="font-family:'Anton';font-size:19px;color:#fff;">12</div><div style="font-size:8px;color:#fff;letter-spacing:.06em;">学び</div></div>
+          <div style="flex:1;padding:11px 0;text-align:center;border-right:1px solid rgba(255,255,255,.06);"><div style="font-family:'Anton';font-size:19px;color:#fff;">2,480</div><div style="font-size:8px;color:#fff;letter-spacing:.06em;">POINTS</div></div>
+          <div style="flex:1;padding:11px 0;text-align:center;"><div style="font-family:'Anton';font-size:19px;color:#fff;">18</div><div style="font-size:8px;color:#fff;letter-spacing:.06em;">連続LOGIN</div></div>
+        </div>
+
+        <div style="display:flex;gap:7px;margin-top:13px;">
+          <div style="display:flex;align-items:center;gap:6px;font-family:'Oswald';font-size:9px;letter-spacing:.04em;color:#fff;border:1px solid var(--line,rgba(255,45,45,.4));padding:5px 10px;background:var(--soft,rgba(255,45,45,.12));"><span style="color:var(--accent,#FF2D2D);">▲</span>HUNGRY</div>
+          <div style="display:flex;align-items:center;gap:6px;font-family:'Oswald';font-size:9px;letter-spacing:.04em;color:#fff;border:1px solid var(--line,rgba(255,45,45,.4));padding:5px 10px;background:var(--soft,rgba(255,45,45,.12));"><span style="color:var(--accent,#FF2D2D);">▲</span>育成者</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 今日のひとこと -->
+  <section id="message" style="padding:22px 18px 6px;scroll-margin-top:54px;">
+    <div style="position:relative;border-radius:0;overflow:hidden;border:1px solid var(--line,rgba(255,45,45,.4));padding:22px 20px;background:linear-gradient(155deg, #160a0a, #0a0a0a);">
+      <div style="position:absolute;top:-40%;right:-10%;width:200px;height:200px;border-radius:50%;background:var(--glow,rgba(255,45,45,.5));opacity:.22;filter:blur(46px);"></div>
+      <div style="position:relative;">
+        <div style="font-family:'Oswald';font-size:9px;letter-spacing:.22em;color:var(--accent,#FF2D2D);margin-bottom:14px;">今日の AK-69 の一言</div>
+        <div style="font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:19px;line-height:1.6;color:#fff;">{{ dailyWord }}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;"><div style="font-size:11px;color:#fff;">— AK-69</div><div onClick="{{ nextWord }}" style="font-size:10px;color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:0;padding:6px 12px;cursor:pointer;">気合を注入 ↻</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 限定メッセージ video -->
+  <section style="padding:16px 18px 6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;"><div style="font-family:'Oswald';font-size:11px;letter-spacing:.14em;color:#fff;">会員限定メッセージ</div><div style="font-size:10px;color:var(--accent,#FF2D2D);">すべて ›</div></div>
+    <div style="position:relative;border-radius:0;overflow:hidden;height:188px;border:1px solid rgba(255,255,255,.08);">
+      <div style="position:absolute;inset:0;background:linear-gradient(150deg,#2a0d0d,#0a0a0a);"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.88));"></div>
+      <div style="position:absolute;top:12px;left:12px;display:flex;gap:7px;"><div style="font-family:'Oswald';font-size:9px;color:#fff;background:var(--accent,#FF2D2D);padding:4px 9px;border-radius:0;letter-spacing:.08em;">会員限定</div><div style="font-size:9px;color:#fff;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);padding:4px 9px;border-radius:0;">03:24</div></div>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;">▶</div>
+      <div style="position:absolute;left:14px;right:14px;bottom:14px;"><div style="font-weight:700;font-size:15px;color:#fff;line-height:1.4;">今月のメッセージ｜第2ステージの始め方</div><div style="font-size:11px;color:#fff;margin-top:5px;line-height:1.5;">立ち止まっている奴へ。<br>もう一度、自分のビートを鳴らすために。</div></div>
+    </div>
+  </section>
+
+  <!-- ===== VERSE 01 ─ 今日のメニュー ===== -->
+  <section id="menu" style="padding:34px 18px 6px;scroll-margin-top:54px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 01</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">TODAY'S MENU</div></div>
+    <h2 style="margin:0 0 16px;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:22px;color:#fff;">今日のメニュー</h2>
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <sc-for list="{{ missions }}" as="m" hint-placeholder-count="3">
+        <div style="border:1px solid {{ m.border }};border-radius:0;padding:15px 16px;background:{{ m.bg }};">
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-weight:700;font-size:14px;color:#fff;">{{ m.title }}</div><div style="font-family:'Oswald';font-size:11px;color:{{ m.stcol }};white-space:nowrap;">{{ m.state }}</div></div>
+          <div style="font-size:11px;color:#fff;margin-top:5px;">{{ m.sub }}</div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:10px;"><div style="font-size:9px;color:var(--accent,#FF2D2D);border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:3px 9px;">報酬</div><div style="font-size:10px;color:#fff;">{{ m.reward }}</div></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== VERSE 02 ─ REALIZE CLUB 連携 ===== -->
+  <section id="club" style="position:relative;padding:40px 18px 8px;margin-top:20px;background:linear-gradient(180deg,#070707,#0c0a0a 50%,#070707);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden;scroll-margin-top:54px;">
+    <div style="position:absolute;top:-20%;right:-20%;width:280px;height:280px;border-radius:50%;background:var(--glow,rgba(255,45,45,.5));opacity:.15;filter:blur(60px);"></div>
+    <div style="position:relative;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 02</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">REALIZE CLUB</div></div>
+      <h2 style="margin:0 0 6px;font-family:'Anton';font-size:30px;line-height:1;color:#fff;">人生を整える</h2>
+      <p style="margin:8px 0 20px;font-size:12px;line-height:1.85;color:#fff;">このクラブの中心。学びを、実際の人生設計へ。<br>診断・シミュレーション・設計書で、あなたの「今」と「これから」を見える化します。</p>
+
+      <!-- life score -->
+      <div style="display:flex;align-items:center;gap:18px;border:1px solid rgba(255,255,255,.1);border-radius:0;padding:18px;background:rgba(255,255,255,.025);margin-bottom:14px;">
+        <div style="width:92px;height:92px;flex:none;border-radius:50%;background:conic-gradient(var(--accent,#FF2D2D) 0% 68%, rgba(255,255,255,.08) 68% 100%);display:flex;align-items:center;justify-content:center;">
+          <div style="width:72px;height:72px;border-radius:50%;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-family:'Anton';font-size:26px;color:#fff;line-height:1;">68</div><div style="font-size:8px;color:#fff;margin-top:2px;">スコア</div></div>
+        </div>
+        <div style="flex:1;"><div style="font-weight:700;font-size:14px;color:#fff;">総合ライフスコア</div><div style="font-size:11px;color:#fff;margin-top:5px;line-height:1.6;">お金・住まい・万が一・老後・災害・健康の整い度を1つのスコアに。</div><div style="display:inline-block;font-size:10px;color:var(--accent,#FF2D2D);border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:3px 10px;margin-top:9px;">前回より +6</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;">
+        <sc-for list="{{ realizeGrid }}" as="g" hint-placeholder-count="0">
+          <div style="border:1px solid rgba(255,255,255,.09);border-radius:0;padding:13px;background:rgba(255,255,255,.02);">
+            <sc-if value="{{ g.iconEl }}" hint-placeholder-val="{{ false }}">{{ g.iconEl }}</sc-if>
+            <div style="font-weight:700;font-size:13px;color:#fff;line-height:1.35;">{{ g.title }}</div>
+            <div style="font-size:10px;color:#fff;margin-top:3px;">{{ g.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <a href="#check" style="display:block;text-align:center;text-decoration:none;font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.08em;color:#fff;background:var(--accent,#FF2D2D);padding:15px;border-radius:0;margin-top:14px;box-shadow:0 10px 26px var(--glow,rgba(255,45,45,.5));">人生を整えはじめる ›</a>
+    </div>
+  </section>
+
+  <div style="padding:14px 16px;"><img src="assets/ticket.jpg" alt="AK ENLIGHTMENT MUSIAM ─ OFFICIAL SITE" style="width:100%;display:block;filter:contrast(1.32) saturate(1.45) brightness(1.08);image-rendering:auto;"></div>
+
+  <!-- ===== VERSE 03 ─ 人生6大項目 ===== -->
+  <section id="check" style="padding:40px 18px 6px;scroll-margin-top:54px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 03</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">6 CONDITIONS</div></div>
+    <h2 style="margin:0 0 6px;font-family:'Anton';font-size:28px;line-height:1.05;color:#fff;">コンディションを<br>見える化</h2>
+    <p style="margin:8px 0 18px;font-size:12px;line-height:1.85;color:#fff;">お金・住まい・万が一・老後・災害・健康。<br>6つのコンディションを計測し、いま整えるべきポイントを見つけます。</p>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+      <div style="font-family:'Anton';font-size:40px;color:var(--accent,#FF2D2D);line-height:1;">65%</div>
+      <div style="font-size:11px;color:#fff;">総合整い度<br><span style="color:#fff;">あと少しで RISING 維持</span></div>
+    </div>
+    <div style="position:relative;border:1px solid rgba(255,255,255,.09);padding:18px 12px;background:rgba(255,255,255,.02);">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px 6px;">
+        <sc-for list="{{ conditions }}" as="c" hint-placeholder-count="6">
+          <div style="text-align:center;">
+            <div style="position:relative;width:80px;height:80px;margin:0 auto;border-radius:50%;background:conic-gradient(var(--accent,#FF2D2D) calc({{ c.pct }} * 1%), rgba(255,255,255,.09) calc({{ c.pct }} * 1%));">
+              <div style="position:absolute;inset:7px;border-radius:50%;background:#0d0d0d;display:flex;align-items:center;justify-content:center;">
+                <div style="font-family:'Anton';font-size:20px;color:#fff;line-height:1;">{{ c.pct }}<span style="font-size:10px;color:#fff;">%</span></div>
+              </div>
+            </div>
+            <div style="font-size:11px;color:#fff;margin-top:9px;font-weight:600;">{{ c.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <a href="#check" style="display:block;text-align:center;text-decoration:none;font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.08em;color:#fff;border:1px solid rgba(255,255,255,.22);padding:14px;border-radius:0;margin-top:18px;">詳しく計測する ›</a>
+  </section>
+
+  <!-- ===== VERSE 04 ─ 計量/診断 ===== -->
+  <section id="diagnose" style="position:relative;padding:40px 18px;margin-top:20px;overflow:hidden;text-align:center;background:linear-gradient(160deg,#160a0a,#070707);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);scroll-margin-top:62px;">rder-bottom:1px solid rgba(255,255,255,.06);">
+    <div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 30%, var(--glow,rgba(255,45,45,.5)) 0%, rgba(0,0,0,0) 65%);opacity:.3;"></div>
+    <div style="position:relative;">
+      <div style="display:inline-flex;align-items:center;gap:8px;font-family:'Oswald';font-size:10px;letter-spacing:.22em;color:var(--accent,#FF2D2D);margin-bottom:14px;"><div style="font-family:'Anton';color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:3px 8px;">VERSE 04</div> 計量 ─ DIAGNOSIS</div>
+      <h2 style="margin:0 0 10px;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:22px;line-height:1.45;color:#fff;">3分の計量で、<br>今のコンディションを知る</h2>
+      <p style="margin:0 0 22px;font-size:12px;line-height:1.85;color:#fff;">お金・住まい・万が一・老後・災害・健康。<br>6つの軸で、あなたの「整い度」を見える化します。</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <a href="#check" style="text-decoration:none;font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.08em;color:#fff;background:var(--accent,#FF2D2D);padding:15px;border-radius:0;box-shadow:0 12px 30px var(--glow,rgba(255,45,45,.5));">人生診断を始める</a>
+        <a href="#check" style="text-decoration:none;font-family:'Oswald';font-size:13px;letter-spacing:.08em;color:#fff;border:1px solid rgba(255,255,255,.22);padding:13px;border-radius:0;">性格波形診断を受ける</a>
+      </div>
+    </div>
+  </section>
+
+  <div style="padding:14px 16px;"><img src="assets/ticket.jpg" alt="AK ENLIGHTMENT MUSIAM ─ OFFICIAL SITE" style="width:100%;display:block;filter:contrast(1.32) saturate(1.45) brightness(1.08);image-rendering:auto;"></div>
+
+  <!-- ===== VERSE 05 ─ 学びプログラム ===== -->
+  <section id="train" style="position:relative;padding:40px 18px 6px;scroll-margin-top:54px;overflow:hidden;">
+    <img src="assets/train-bg.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.6;">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, #070707 0%, rgba(7,7,7,.34) 24%, rgba(7,7,7,.4) 76%, #070707 100%);"></div>
+    <div style="position:relative;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 05</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">STUDIO ─ 道場</div></div>
+    <h2 style="margin:0 0 6px;font-family:'Anton';font-size:28px;line-height:1;color:#fff;">学びプログラム</h2>
+    <p style="margin:8px 0 18px;font-size:12px;line-height:1.85;color:#fff;">成り上がり、勝負哲学、仲間づくり、ビジネス理念。<br>AK-69が歩んできた経験を、あなたの学びのメニューに。</p>
+    <img src="assets/life-studio.png" alt="AK LIFE STUDIO" style="height:45px;width:auto;display:block;margin-bottom:18px;filter:drop-shadow(0 0 10px rgba(255,255,255,.9)) drop-shadow(0 0 26px rgba(255,255,255,.6)) drop-shadow(0 0 44px rgba(255,255,255,.35));">
+    <div style="position:relative;border-radius:0;overflow:hidden;height:128px;margin-bottom:12px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(150deg,#241010,#0a0a0a);">
+      <div style="position:absolute;inset:0;background:radial-gradient(70% 90% at 80% 10%,var(--glow,rgba(255,45,45,.5)),rgba(0,0,0,0) 60%);opacity:.45;"></div>
+      <div style="position:absolute;left:16px;bottom:14px;"><div style="font-family:'Oswald';font-size:9px;letter-spacing:.2em;color:var(--accent,#FF2D2D);">RISE STORY</div><div style="font-family:'Anton';font-size:22px;color:#fff;line-height:1;margin-top:3px;">頂点を掴んだ軌跡</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <sc-for list="{{ programs }}" as="p" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:13px;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:15px;background:linear-gradient(135deg,rgba(255,45,45,.14),rgba(255,255,255,.02));box-shadow:0 5px 18px rgba(255,45,45,.12);">
+          <div style="width:38px;height:38px;flex:none;border-radius:0;background:var(--soft,rgba(255,45,45,.12));border:1px solid var(--line,rgba(255,45,45,.4));display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:15px;color:var(--accent,#FF2D2D);">{{ p.n }}</div>
+          <div style="flex:1;"><div style="font-weight:700;font-size:14px;color:#fff;">{{ p.title }}</div><div style="font-size:11px;color:#fff;margin-top:2px;line-height:1.5;">{{ p.sub }}</div></div>
+          <div style="font-family:'Oswald';font-size:10px;color:var(--accent,#FF2D2D);white-space:nowrap;">{{ p.cta }} →</div>
+        </div>
+      </sc-for>
+    </div>
+    </div>
+  </section>
+
+  <!-- ===== VERSE 06 ─ 特典映像 ===== -->
+  <section id="bonus" style="padding:40px 0 6px;scroll-margin-top:62px;">
+    <div style="padding:0 18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 06</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">BONUS</div></div>
+      <h2 style="margin:0 0 5px;font-family:'Anton';font-size:26px;line-height:1;color:#fff;">特典映像</h2>
+      <p style="margin:8px 0 16px;font-size:11px;color:#fff;">会員限定の特典映像。横にスワイプ →</p>
+    </div>
+    <div style="display:flex;gap:13px;overflow-x:auto;padding:0 18px 8px;scroll-snap-type:x mandatory;">
+      <sc-for list="{{ perks }}" as="pv" hint-placeholder-count="3">
+        <div style="flex:none;width:262px;scroll-snap-align:start;border-radius:0;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.08);background:#101010;">
+          <div style="position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(180deg, {{ pv.c1 }}, {{ pv.c2 }});overflow:hidden;">
+            <sc-if value="{{ pv.imgEl }}" hint-placeholder-val="{{ false }}">{{ pv.imgEl }}</sc-if>
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.4));"></div>
+            <div style="position:absolute;top:10px;left:10px;display:flex;gap:6px;"><div style="font-family:'Oswald';font-size:9px;color:#fff;background:var(--accent,#FF2D2D);padding:4px 9px;border-radius:0;letter-spacing:.06em;">{{ pv.tag }}</div></div>
+            <div style="position:absolute;right:10px;bottom:10px;font-size:9px;color:#fff;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);padding:3px 8px;border-radius:0;">{{ pv.len }}</div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.42);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;">▶</div>
+          </div>
+          <div style="padding:12px 13px 14px;"><div style="font-weight:700;font-size:14px;color:#fff;line-height:1.4;">{{ pv.title }}</div><div style="display:inline-block;font-size:9px;color:var(--accent,#FF2D2D);border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:3px 9px;margin-top:9px;">{{ pv.badge }}</div></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <div style="padding:14px 16px;"><img src="assets/ticket.jpg" alt="AK ENLIGHTMENT MUSIAM ─ OFFICIAL SITE" style="width:100%;display:block;filter:contrast(1.32) saturate(1.45) brightness(1.08);image-rendering:auto;"></div>
+
+  <!-- ===== VERSE 07 ─ イベント・講演 ===== -->
+  <section id="events" style="padding:34px 18px 6px;scroll-margin-top:62px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 07</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">EVENTS</div></div>
+    <h2 style="margin:0 0 16px;font-family:'Anton';font-size:24px;line-height:1;color:#fff;">イベント・トークライブ</h2>
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <sc-for list="{{ events }}" as="e" hint-placeholder-count="3">
+        <div style="display:flex;align-items:center;gap:13px;border:1px solid rgba(255,255,255,.09);border-radius:0;padding:14px 15px;background:rgba(255,255,255,.02);">
+          <div style="flex:1;"><div style="font-weight:700;font-size:13px;color:#fff;line-height:1.4;">{{ e.title }}</div><div style="font-size:10px;color:#fff;margin-top:4px;">{{ e.when }}</div></div>
+          <div style="font-family:'Oswald';font-size:10px;letter-spacing:.04em;color:#fff;border:1px solid var(--line,rgba(255,45,45,.4));background:var(--soft,rgba(255,45,45,.12));border-radius:0;padding:7px 13px;white-space:nowrap;">{{ e.cta }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== VERSE 08 ─ 社会貢献 ===== -->
+  <section id="impact" style="position:relative;padding:40px 18px;margin-top:20px;overflow:hidden;background:linear-gradient(180deg,#070707,#0c0a0a 50%,#070707);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);scroll-margin-top:62px;">
+    <img src="assets/impact-bg.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;opacity:.72;">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, #070707 0%, rgba(7,7,7,.78) 14%, rgba(7,7,7,.34) 40%, rgba(7,7,7,.5) 80%, #070707 100%);"></div>
+    <div style="position:absolute;top:-20%;left:-20%;width:260px;height:260px;border-radius:50%;background:var(--glow,rgba(255,45,45,.5));opacity:.13;filter:blur(60px);"></div>
+    <div style="position:relative;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 08</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">IMPACT</div></div>
+      <h2 style="margin:0 0 10px;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:22px;line-height:1.45;color:#fff;">社会貢献プロジェクト</h2>
+      <p style="margin:0 0 20px;font-size:12px;line-height:1.85;color:#fff;">FOUNDING BELIEVER として、次世代アーティストの奨学支援や、地域の子どもたちの居場所づくりに参加できます。<br>這い上がる力を、次の世代へ。</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:13px;border:1px solid rgba(255,255,255,.1);border-radius:0;padding:15px;background:rgba(255,255,255,.025);"><div style="width:34px;height:34px;flex:none;border-radius:0;background:var(--soft,rgba(255,45,45,.12));border:1px solid var(--line,rgba(255,45,45,.4));display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:13px;color:var(--accent,#FF2D2D);">音</div><div style="flex:1;font-size:13px;color:#fff;">次世代アーティスト奨学プロジェクト</div></div>
+        <div style="display:flex;align-items:center;gap:13px;border:1px solid rgba(255,255,255,.1);border-radius:0;padding:15px;background:rgba(255,255,255,.025);"><div style="width:34px;height:34px;flex:none;border-radius:0;background:var(--soft,rgba(255,45,45,.12));border:1px solid var(--line,rgba(255,45,45,.4));display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:13px;color:var(--accent,#FF2D2D);">街</div><div style="flex:1;font-size:13px;color:#fff;">地域の子ども応援プロジェクト</div></div>
+      </div>
+      <a href="#" style="display:block;text-align:center;text-decoration:none;font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.08em;color:#fff;background:var(--accent,#FF2D2D);padding:15px;border-radius:0;box-shadow:0 10px 26px var(--glow,rgba(255,45,45,.5));">プロジェクトに参加する ›</a>
+    </div>
+  </section>
+
+  <div style="padding:14px 16px;"><img src="assets/ticket.jpg" alt="AK ENLIGHTMENT MUSIAM ─ OFFICIAL SITE" style="width:100%;display:block;filter:contrast(1.32) saturate(1.45) brightness(1.08);image-rendering:auto;"></div>
+
+  <!-- ===== VERSE 09 ─ ショッピング ===== -->
+  <section id="shop" style="position:relative;padding:40px 18px 6px;scroll-margin-top:54px;overflow:hidden;">
+    <img src="assets/shop-bg.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;opacity:.62;">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, #070707 0%, rgba(7,7,7,.32) 26%, rgba(7,7,7,.38) 74%, #070707 100%);"></div>
+    <div style="position:relative;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 09</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">STORE</div></div>
+    <h2 style="margin:0 0 6px;font-family:'Anton';font-size:28px;line-height:1;color:#fff;">会員限定ショップ</h2>
+    <p style="margin:8px 0 18px;font-size:12px;line-height:1.85;color:#fff;">くらしを支えるマーケットと、AK-69オリジナルグッズ。</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="position:relative;display:flex;align-items:center;gap:14px;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:16px;overflow:hidden;background:linear-gradient(150deg,#1a0c0c,#0a0a0a);">
+        <div style="width:60px;height:60px;flex:none;border-radius:0;background:var(--accent,#FF2D2D);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;"><div style="font-family:'Anton';font-size:20px;line-height:1;">90%</div><div style="font-family:'Oswald';font-size:8px;letter-spacing:.1em;">OFF</div></div>
+        <div style="flex:1;"><div style="font-family:'Oswald';font-size:9px;letter-spacing:.16em;color:var(--accent,#FF2D2D);">会員特価マーケット</div><div style="font-weight:700;font-size:15px;color:#fff;margin-top:3px;">AK MARKET</div><div style="font-size:10px;color:#fff;margin-top:3px;">日用品・食料品が最大 90%OFF。</div></div>
+        <div style="color:#fff;font-size:16px;">›</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:16px;background:linear-gradient(150deg,#1a0c0c,#0a0a0a);box-shadow:0 6px 22px rgba(255,45,45,.16);">
+        <div style="width:60px;height:60px;flex:none;border-radius:0;background:linear-gradient(135deg,#2a2a2a,#0e0e0e);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:18px;color:#fff;">69</div>
+        <div style="flex:1;"><div style="font-family:'Oswald';font-size:9px;letter-spacing:.16em;color:#fff;">OFFICIAL</div><div style="font-weight:700;font-size:15px;color:#fff;margin-top:3px;">AK-69 公式ストア</div><div style="font-size:10px;color:#fff;margin-top:3px;">オリジナルグッズ・ウェア・アクセサリー。</div></div>
+        <div style="color:#fff;font-size:16px;">›</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px;">
+      <sc-for list="{{ products }}" as="pr" hint-placeholder-count="0">
+        <div style="border-radius:0;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#0e0e0e;">
+          <div style="height:118px;background:linear-gradient(150deg, {{ pr.c1 }}, {{ pr.c2 }});position:relative;">
+            <sc-if value="{{ pr.imgEl }}" hint-placeholder-val="{{ false }}">{{ pr.imgEl }}</sc-if>
+            <div style="position:absolute;top:9px;left:9px;font-family:'Oswald';font-size:8px;letter-spacing:.12em;color:#fff;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);padding:3px 8px;border-radius:0;">{{ pr.tag }}</div>
+          </div>
+          <div style="padding:11px 12px 13px;"><div style="font-weight:700;font-size:12px;color:#fff;line-height:1.4;">{{ pr.name }}</div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;"><div style="font-family:'Oswald';font-size:13px;color:var(--accent,#FF2D2D);">{{ pr.price }}</div><div style="font-size:9px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:5px 11px;">CART</div></div></div>
+        </div>
+      </sc-for>
+    </div>
+    </div>
+  </section>
+
+  <!-- ===== VERSE 10 ─ ランク・バッジ ===== -->
+  <section id="rank" style="position:relative;padding:40px 18px 8px;margin-top:20px;overflow:hidden;background:linear-gradient(180deg,#070707,#0c0a0a 50%,#070707);border-top:1px solid rgba(255,255,255,.06);scroll-margin-top:54px;">
+    <div style="position:absolute;top:10%;right:-25%;width:300px;height:300px;border-radius:50%;background:var(--glow,rgba(255,45,45,.5));opacity:.12;filter:blur(64px);"></div>
+    <div style="position:relative;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-family:'Anton';font-size:11px;color:#fff;background:var(--accent,#FF2D2D);border-radius:0;padding:4px 9px;">VERSE 10</div><div style="font-family:'Oswald';font-size:10px;letter-spacing:.24em;color:#fff;">RANK &amp; BADGE</div></div>
+      <h2 style="margin:0 0 16px;font-family:'Anton';font-size:26px;line-height:1.05;color:#fff;">階級とチェーン</h2>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <div style="flex:1;border:1px solid rgba(255,255,255,.09);border-radius:0;padding:13px;background:rgba(255,255,255,.02);"><div style="font-family:'Oswald';font-size:9px;letter-spacing:.16em;color:#fff;">スタート</div><div style="font-family:'Anton';font-size:22px;line-height:1.1;color:#fff;margin-top:4px;">DAY ONE</div><div style="font-size:9px;color:#fff;margin-top:3px;">登録直後の最初の階級</div></div>
+        <div style="flex:1;border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:13px;background:var(--soft,rgba(255,45,45,.12));"><div style="font-family:'Oswald';font-size:9px;letter-spacing:.16em;color:var(--accent,#FF2D2D);">目標</div><div style="font-family:'Anton';font-size:22px;line-height:1.1;color:#fff;margin-top:4px;">LEGEND</div><div style="font-size:9px;color:#fff;margin-top:3px;">学び・診断・設計・社会貢献を継続</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px;">
+        <sc-for list="{{ rankBelts }}" as="rb" hint-placeholder-count="6">
+          <div style="display:flex;align-items:center;gap:13px;border:1px solid {{ rb.border }};border-radius:0;padding:13px 15px;background:{{ rb.bg }};">
+            <div style="width:24px;text-align:center;font-size:14px;">{{ rb.icon }}</div>
+            <div style="flex:1;"><div style="font-family:'Anton';font-size:19px;line-height:1.15;letter-spacing:.01em;color:{{ rb.col }};">{{ rb.name }}</div><div style="font-size:10px;color:#fff;margin-top:2px;">{{ rb.cond }}</div></div>
+            <div style="font-family:'Oswald';font-size:9.5px;letter-spacing:.06em;color:{{ rb.col }};white-space:nowrap;">{{ rb.state }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-family:'Oswald';font-size:11px;letter-spacing:.14em;color:#fff;margin-bottom:12px;">獲得バッジ</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <sc-for list="{{ badges }}" as="b" hint-placeholder-count="8">
+          <div style="text-align:center;opacity:{{ b.op }};">
+            <div style="width:100%;aspect-ratio:1;border-radius:50%;background:{{ b.bg }};border:1px solid {{ b.border }};display:flex;align-items:center;justify-content:center;font-size:18px;color:{{ b.col }};">{{ b.icon }}</div>
+            <div style="font-size:8.5px;color:#fff;margin-top:5px;line-height:1.2;">{{ b.name }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <div style="padding:14px 16px;"><img src="assets/ticket.jpg" alt="AK ENLIGHTMENT MUSIAM ─ OFFICIAL SITE" style="width:100%;display:block;filter:contrast(1.32) saturate(1.45) brightness(1.08);image-rendering:auto;"></div>
+
+  <!-- ===== FINAL VERSE ─ 信条 ===== -->
+  <section id="creed" style="position:relative;padding:48px 22px;text-align:center;overflow:hidden;scroll-margin-top:62px;">
+    <img src="assets/creed-bg.jpg" alt="AK-69" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%;opacity:1;">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(7,7,7,.72) 0%, rgba(7,7,7,.22) 30%, rgba(7,7,7,.34) 68%, #070707 100%);"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 25%, var(--glow,rgba(255,45,45,.5)) 0%, rgba(0,0,0,0) 65%);opacity:.18;"></div>
+    <div style="position:relative;">
+      <div style="font-family:'Oswald';font-size:10px;letter-spacing:.3em;color:var(--accent,#FF2D2D);margin-bottom:16px;">FINAL VERSE ─ 信条</div>
+      <h2 style="margin:0 0 22px;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:20px;line-height:1.55;color:#fff;">「日本に人生教育文化を創る、<br>最初の仲間」の誓い</h2>
+      <div style="display:flex;flex-direction:column;gap:12px;text-align:left;max-width:340px;margin:0 auto;">
+        <sc-for list="{{ creed }}" as="c" hint-placeholder-count="4">
+          <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,.09);border-radius:0;padding:14px 15px;background:rgba(255,255,255,.025);">
+            <div style="font-family:'Anton';font-size:16px;color:var(--accent,#FF2D2D);line-height:1.3;">{{ c.n }}</div>
+            <div style="font-size:12.5px;line-height:1.7;color:#fff;">{{ c.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:22px;font-family:'Shippori Mincho B1',serif;font-weight:600;font-size:13px;color:#fff;">AK LIFE STUDIO ─ AK-69</div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <div style="padding:30px 22px 30px;border-top:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;flex-wrap:wrap;gap:16px 20px;justify-content:center;font-size:11px;color:#fff;margin-bottom:18px;">
+      <span>利用規約</span><span>プライバシー</span><span>REALIZE CLUB 連携</span><span>お問い合わせ</span>
+    </div>
+    <p style="margin:0 0 18px;font-size:9.5px;line-height:1.7;color:#fff;text-align:center;">本AIコーチはAK-69の思想・言葉を学習したAIで、本人の発言・個別の保証ではありません。会員の悩みや不安を整理し、金融・保険・不動産・医療・法律に関する断定的な助言は行わず、必要に応じてライフメイクプランナーや専門家への相談につなぎます。</p>
+    <div style="text-align:center;"><div style="font-family:'Anton';font-size:15px;color:#fff;letter-spacing:.04em;">AK <span style="color:var(--accent,#FF2D2D);">LIFE</span> STUDIO</div><div style="font-size:10px;color:#fff;margin-top:7px;letter-spacing:.1em;">© 2026 AK LIFE STUDIO ─ REALIZE</div></div>
+  </div>
+
+  <!-- bottom nav -->
+  <div style="position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
+    <div onClick="{{ openOnb }}" style="cursor:pointer;pointer-events:auto;width:100%;max-width:440px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;font-family:'Oswald';font-weight:700;font-size:13.5px;letter-spacing:.08em;color:#fff;background:var(--accent,#FF2D2D);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.25);padding:14px 14px;box-shadow:0 -8px 26px var(--glow,rgba(255,45,45,.5));animation:akPulse 2.4s ease-in-out infinite;">
+      <span style="font-size:15px;">▶</span>初めての方・使い方はこちら<span style="font-size:15px;">›</span>
+    </div>
+  </div>
+
+  <!-- AI coach FAB -->
+  <div onClick="{{ openCoach }}" style="position:fixed;z-index:55;right:max(14px, calc(50% - 210px));bottom:60px;width:100px;height:100px;border-radius:50%;overflow:hidden;cursor:pointer;animation:akPulse 2.4s ease-in-out infinite;border:2px solid var(--accent,#FF2D2D);box-shadow:0 10px 30px var(--glow,rgba(255,45,45,.6)),0 0 0 4px rgba(7,7,7,.55);">
+    <img src="assets/hero-ak.jpg" alt="AK-69" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:saturate(2.4) contrast(1.12) brightness(1.7);">
+    <div style="position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(7,7,7,.92));padding:7px 0 4px;text-align:center;">
+      <div style="font-family:'Oswald';font-weight:700;font-size:7.5px;letter-spacing:.1em;color:#fff;">AI COACH</div>
+    </div>
+  </div>
+
+  <!-- AI coach panel -->
+  <sc-if value="{{ coachOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:80;display:flex;justify-content:center;">
+    <div onClick="{{ closeCoach }}" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);"></div>
+    <div style="position:relative;width:100%;max-width:440px;margin-top:auto;background:#0c0a0a;border-top:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 -16px 50px rgba(0,0,0,.8);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);">
+        <div style="display:flex;align-items:center;gap:11px;"><div style="width:36px;height:36px;border-radius:50%;background:var(--accent,#FF2D2D);display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:13px;color:#fff;">69</div><div><div style="font-weight:700;font-size:14px;color:#fff;">AK-69 AI COACH</div><div style="font-size:10px;color:#fff;">お前のコーナーで、次の一手を一緒に</div></div></div>
+        <div onClick="{{ closeCoach }}" style="width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;font-size:14px;">×</div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;">
+        <div style="align-self:flex-start;max-width:78%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:0;padding:13px 15px;font-size:13px;line-height:1.7;color:#fff;">今日のテーマは"負けた後にどう這い上がるか"。最近、何に詰まってる？正直に吐き出してみな。</div>
+        <div style="align-self:flex-end;max-width:78%;background:var(--soft,rgba(255,45,45,.12));border:1px solid var(--line,rgba(255,45,45,.4));border-radius:0;padding:13px 15px;font-size:13px;line-height:1.7;color:#fff;">仕事も将来も不安で、何から手をつければいいか分からない。</div>
+        <div style="align-self:flex-start;max-width:78%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:0;padding:13px 15px;font-size:13px;line-height:1.7;color:#fff;">わかる。まずは全部いっぺんに片付けようとすんな。3分の「人生診断」で、今のコンディションだけ見える化しよう。整える順番は、そこから一緒に決める。</div>
+      </div>
+      <div style="padding:12px 16px 18px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:9px;align-items:center;">
+        <div style="flex:1;border:1px solid rgba(255,255,255,.14);border-radius:0;padding:11px 16px;font-size:12px;color:#fff;">メッセージを入力…</div>
+        <div style="width:40px;height:40px;flex:none;border-radius:50%;background:var(--accent,#FF2D2D);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;">↑</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- nav drawer -->
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:90;display:flex;justify-content:center;">
+    <div onClick="{{ closeMenu }}" style="position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(3px);"></div>
+    <div style="position:relative;width:100%;max-width:440px;height:100%;display:flex;flex-direction:column;margin-left:auto;margin-right:auto;">
+      <div style="position:absolute;top:0;left:0;bottom:0;width:80%;max-width:320px;background:#0c0a0a;border-right:1px solid var(--line,rgba(255,45,45,.4));box-shadow:18px 0 50px rgba(0,0,0,.7);display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 18px 16px;border-bottom:1px solid rgba(255,255,255,.07);">
+          <img src="assets/ak-logo.png" alt="AK" style="height:30px;width:auto;filter:drop-shadow(0 0 6px var(--glow,rgba(255,45,45,.5))) drop-shadow(0 0 2px rgba(255,255,255,.8));">
+          <div onClick="{{ closeMenu }}" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;font-size:15px;">×</div>
+        </div>
+        <div style="padding:14px 14px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;flex:1;">
+          <sc-for list="{{ menuLinks }}" as="ml" hint-placeholder-count="11">
+            <a href="{{ ml.href }}" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:14px;text-decoration:none;padding:13px 12px;border-radius:0;">
+              <div style="width:30px;flex:none;font-family:'Anton';font-size:13px;color:var(--accent,#FF2D2D);text-align:center;">{{ ml.no }}</div>
+              <div style="flex:1;"><div style="font-size:14px;color:#fff;font-weight:600;">{{ ml.label }}</div><div style="font-family:'Oswald';font-size:9px;letter-spacing:.16em;color:#fff;">{{ ml.en }}</div></div>
+              <div style="color:#fff;font-size:15px;">›</div>
+            </a>
+          </sc-for>
+        </div>
+        <div style="padding:16px 18px 22px;border-top:1px solid rgba(255,255,255,.07);">
+          <div style="display:flex;align-items:center;gap:11px;"><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#333,#111);border:1px solid var(--line,rgba(255,45,45,.4));"></div><div style="flex:1;"><div style="font-size:13px;color:#fff;font-weight:700;">山田 太郎</div><div style="font-size:10px;color:#fff;">HUSTLER ・ No.0001-0427</div></div></div>
+          <div style="display:flex;gap:8px;margin-top:14px;"><div style="flex:1;text-align:center;font-size:11px;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:0;padding:9px;">設定</div><div style="flex:1;text-align:center;font-size:11px;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:0;padding:9px;">ログアウト</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- onboarding ─ 初めての方へ -->
+  <sc-if value="{{ onbOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:95;display:flex;justify-content:center;background:rgba(0,0,0,.4);">
+    <div style="position:relative;width:100%;max-width:440px;height:100%;overflow-y:auto;background:#070707;box-shadow:0 0 80px rgba(0,0,0,.9);padding-bottom:30px;">
+
+      <!-- top bar -->
+      <div style="position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;padding:13px 16px;background:rgba(7,7,7,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08);">
+        <div onClick="{{ closeOnb }}" style="display:flex;align-items:center;gap:7px;cursor:pointer;font-family:'Oswald';font-weight:600;font-size:12px;letter-spacing:.06em;color:#fff;"><span style="font-size:15px;">←</span>戻る</div>
+      </div>
+
+      <!-- WELCOME -->
+      <div style="height:7px;background:repeating-linear-gradient(45deg, var(--accent,#FF2D2D) 0 9px, #111 9px 18px);"></div>
+      <div style="padding:26px 22px 8px;text-align:center;">
+        <div style="font-family:'Oswald';font-size:9px;letter-spacing:.26em;color:var(--accent,#FF2D2D);margin-bottom:7px;">はじめての方へ</div>
+        <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.22em;color:#888;margin-bottom:14px;">WELCOME TO AK ENLIGHTMENT CLUB</div>
+        <h2 style="margin:0;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:23px;line-height:1.5;color:#fff;">人生100年時代を、<br>もう一度、自分の手で。</h2>
+        <p style="margin:16px 0 0;font-size:12px;line-height:1.95;color:#cfcfcf;text-align:left;">ここは、AK-69の<span style="color:#fff;font-weight:700;">人生哲学</span>と<span style="color:#fff;font-weight:700;">人生支援の理念</span>を合体させた会員サイトです。学んだ人、そしてその周りの人までが、人生100年の幸せを成就できるように──そう願って作りました。</p>
+      </div>
+
+      <!-- BREAKTHROUGH -->
+      <div style="padding:18px 22px 6px;">
+        <div style="position:relative;border:1px solid var(--line,rgba(255,45,45,.4));overflow:hidden;background:linear-gradient(155deg,#160a0a,#0a0a0a);">
+          <div style="position:relative;height:150px;overflow:hidden;">
+            <img src="assets/hero-ak.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 14%;filter:saturate(1.5) contrast(1.1);">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,7,7,.1),rgba(7,7,7,.9));"></div>
+          </div>
+          <div style="padding:16px 17px 18px;">
+            <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.22em;color:var(--accent,#FF2D2D);margin-bottom:8px;">BREAKTHROUGH ・ PHILOSOPHY</div>
+            <div style="font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:17px;line-height:1.55;color:#fff;">頂点を掴んだ「這い上がる力」と<br>「哲学」を、あなたの毎日に。</div>
+            <p style="margin:12px 0 0;font-size:11.5px;line-height:1.85;color:#cfcfcf;">どん底から何度でも這い上がってきたAK-69の突破力と、諦めない心。その両方を、これからの場面であなたの味方にします。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 01 RELATIONSHIP -->
+      <div style="padding:24px 22px 6px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px;"><div style="font-family:'Anton';font-size:26px;color:var(--accent,#FF2D2D);line-height:1;">01</div><div style="font-family:'Oswald';font-size:9px;letter-spacing:.22em;color:#888;">RELATIONSHIP</div></div>
+        <h3 style="margin:0 0 8px;font-family:'Anton';font-size:21px;color:#fff;line-height:1.1;">人間関係に悩んだら</h3>
+        <div style="font-family:'Oswald';font-size:10px;letter-spacing:.06em;color:var(--accent,#FF2D2D);border-left:2px solid var(--accent,#FF2D2D);padding-left:9px;margin-bottom:12px;">AK-69の人生哲学＋性格波形診断</div>
+        <p style="margin:0 0 12px;font-size:12px;line-height:1.9;color:#cfcfcf;">「人を強くする前に、人として育てる」。AK-69の哲学で人との向き合い方を学び、性格波形診断で自分と相手のタイプを見える化。すれ違いの理由が、すっと整理されます。</p>
+        <div style="display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(255,255,255,.1);padding:13px 14px;background:rgba(255,255,255,.025);margin-bottom:12px;">
+          <img src="assets/hero-ak.jpg" alt="" style="width:34px;height:34px;flex:none;border-radius:50%;object-fit:cover;object-position:50% 16%;filter:saturate(1.6);">
+          <div style="flex:1;"><div style="font-family:'Oswald';font-size:8px;letter-spacing:.14em;color:var(--accent,#FF2D2D);margin-bottom:4px;">AI コーチング</div><div style="font-size:12px;line-height:1.7;color:#fff;">相手を変えようとすんな。まず、自分のタイプを知ること。そこから関係は動き出す。</div></div>
+        </div>
+        <a href="#train" onClick="{{ closeOnb }}" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'Oswald';font-weight:600;font-size:12px;letter-spacing:.06em;color:#fff;border:1px solid var(--line,rgba(255,45,45,.4));background:var(--soft,rgba(255,45,45,.12));padding:11px 16px;">学習コンテンツを見る →</a>
+      </div>
+
+      <!-- 02 MONEY -->
+      <div style="padding:24px 22px 6px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px;"><div style="font-family:'Anton';font-size:26px;color:var(--accent,#FF2D2D);line-height:1;">02</div><div style="font-family:'Oswald';font-size:9px;letter-spacing:.22em;color:#888;">MONEY</div></div>
+        <h3 style="margin:0 0 8px;font-family:'Anton';font-size:21px;color:#fff;line-height:1.1;">お金の負担を軽くしたい</h3>
+        <div style="font-family:'Oswald';font-size:10px;letter-spacing:.06em;color:var(--accent,#FF2D2D);border-left:2px solid var(--accent,#FF2D2D);padding-left:9px;margin-bottom:14px;">AK MARKET（日用品が最大90%OFF）</div>
+        <div style="display:flex;align-items:center;gap:14px;border:1px solid var(--line,rgba(255,45,45,.4));padding:16px;background:linear-gradient(150deg,#1a0c0c,#0a0a0a);margin-bottom:12px;">
+          <div style="flex:none;text-align:center;"><div style="font-family:'Anton';font-size:26px;color:var(--accent,#FF2D2D);line-height:1;">¥7,500</div><div style="font-family:'Oswald';font-size:7.5px;letter-spacing:.1em;color:#cfcfcf;margin-top:2px;">／ MONTH SAVE</div></div>
+          <div style="flex:1;font-size:11px;line-height:1.8;color:#cfcfcf;">毎月10,000円の家計改善で、月<span style="color:#fff;font-weight:700;">7,500円</span>が手元に。日用品をマーケットに替えるだけで、年間9万円分の余裕が生まれます。</div>
+        </div>
+        <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.2em;color:#888;margin:14px 0 9px;">ACTUAL SCREENS ・ 実際の画面（横にスクロール →）</div>
+        <div style="display:flex;gap:11px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;margin-bottom:12px;">
+          <sc-for list="{{ onbMarket }}" as="mk" hint-placeholder-count="3">
+            <div style="flex:none;width:130px;scroll-snap-align:start;border:1px solid rgba(255,255,255,.12);background:#fff;overflow:hidden;">
+              <div style="position:relative;width:100%;aspect-ratio:0.82;background:#fff;">
+                <sc-if value="{{ mk.imgEl }}" hint-placeholder-val="{{ false }}">{{ mk.imgEl }}</sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(255,255,255,.1);padding:13px 14px;background:rgba(255,255,255,.025);margin-bottom:12px;">
+          <img src="assets/hero-ak.jpg" alt="" style="width:34px;height:34px;flex:none;border-radius:50%;object-fit:cover;object-position:50% 16%;filter:saturate(1.6);">
+          <div style="flex:1;"><div style="font-family:'Oswald';font-size:8px;letter-spacing:.14em;color:var(--accent,#FF2D2D);margin-bottom:4px;">AI 相談 ＋ 人のサポート</div><div style="font-size:12px;line-height:1.7;color:#fff;">人に言いづらいお金の相談も大丈夫。必要なら、専門スタッフが一緒に家計を整えます。</div></div>
+        </div>
+        <a href="#shop" onClick="{{ closeOnb }}" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'Oswald';font-weight:700;font-size:12px;letter-spacing:.06em;color:#fff;background:var(--accent,#FF2D2D);padding:12px 18px;box-shadow:0 10px 26px var(--glow,rgba(255,45,45,.5));">AK MARKET を開く →</a>
+      </div>
+
+      <!-- 03 FUTURE -->
+      <div style="padding:24px 22px 6px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px;"><div style="font-family:'Anton';font-size:26px;color:var(--accent,#FF2D2D);line-height:1;">03</div><div style="font-family:'Oswald';font-size:9px;letter-spacing:.22em;color:#888;">FUTURE</div></div>
+        <h3 style="margin:0 0 12px;font-family:'Anton';font-size:21px;color:#fff;line-height:1.1;">将来の不安に効く</h3>
+        <p style="margin:0 0 14px;font-size:12px;line-height:1.9;color:#cfcfcf;">なんとなく抱えていたあなたの夢、これからの不安、将来の自分や家族像。AIに打ち明けていくと、ぼんやりしていた<span style="color:#fff;font-weight:700;">あなたの夢や不安が形になり</span>、<span style="color:var(--accent,#FF2D2D);font-weight:700;">次の実行フェーズ</span>へ移せます。</p>
+        <div style="border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02);padding:14px;display:flex;flex-direction:column;gap:10px;">
+          <div style="align-self:flex-end;max-width:80%;background:var(--soft,rgba(255,45,45,.12));border:1px solid var(--line,rgba(255,45,45,.4));padding:10px 13px;font-size:12px;line-height:1.6;color:#fff;">この先、お金も健康も漠然と不安で…</div>
+          <div style="align-self:flex-start;max-width:84%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:10px 13px;font-size:12px;line-height:1.7;color:#fff;">不安は、ぜんぶ書き出せば半分は消える。残り半分を、一つずつ作戦に変えていこう。まずは一番気になることから。</div>
+        </div>
+      </div>
+
+      <!-- RANK UP -->
+      <div style="height:7px;background:repeating-linear-gradient(45deg, var(--accent,#FF2D2D) 0 9px, #111 9px 18px);margin-top:26px;"></div>
+      <div style="padding:24px 22px 6px;text-align:center;">
+        <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.24em;color:var(--accent,#FF2D2D);margin-bottom:9px;">RANK UP ・ REWARDS</div>
+        <h3 style="margin:0 0 16px;font-family:'Anton';font-size:23px;color:#fff;line-height:1.1;">使うほど、ステータスが上がる。</h3>
+        <p style="margin:0 0 16px;font-size:11.5px;line-height:1.85;color:#cfcfcf;">毎日ログインして学ぶほど階級が上がり、特典が解放されていきます。</p>
+        <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
+          <div style="display:flex;align-items:center;gap:13px;border:1px solid var(--line,rgba(255,45,45,.4));padding:14px 15px;background:linear-gradient(135deg,rgba(255,45,45,.14),rgba(255,255,255,.02));">
+            <div style="display:flex;align-items:center;gap:7px;flex:none;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#444,#111);border:1px solid var(--line,rgba(255,45,45,.4));display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:11px;color:#fff;">D1</div><span style="color:var(--accent,#FF2D2D);font-size:13px;">→</span><div style="width:34px;height:34px;border-radius:50%;background:var(--accent,#FF2D2D);display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:11px;color:#fff;box-shadow:0 0 12px var(--glow,rgba(255,45,45,.6));">LG</div></div>
+            <div style="flex:1;font-size:12px;color:#fff;line-height:1.5;"><span style="font-weight:700;">DAY ONE から LEGEND</span> へ、チェーンを集める</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:13px;border:1px solid rgba(255,255,255,.1);padding:14px 15px;background:rgba(255,255,255,.025);">
+            <div style="width:30px;height:30px;flex:none;border-radius:50%;background:var(--accent,#FF2D2D);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">▶</div>
+            <div style="flex:1;font-size:12px;color:#fff;">会員の限定動画が解放</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:13px;border:1px solid rgba(255,255,255,.1);padding:14px 15px;background:rgba(255,255,255,.025);">
+            <div style="width:30px;height:30px;flex:none;border-radius:50%;background:var(--accent,#FF2D2D);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">★</div>
+            <div style="flex:1;font-size:12px;color:#fff;">豪華賞品が割引・優先購入できる</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESSAGE -->
+      <div style="height:7px;background:repeating-linear-gradient(45deg, var(--accent,#FF2D2D) 0 9px, #111 9px 18px);margin-top:26px;"></div>
+      <div style="padding:24px 22px 6px;text-align:center;">
+        <div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.24em;color:var(--accent,#FF2D2D);margin-bottom:9px;">MESSAGE</div>
+        <h3 style="margin:0 0 16px;font-family:'Anton';font-size:22px;color:#fff;line-height:1.1;">最後に、AK-69から。</h3>
+        <div style="position:relative;overflow:hidden;height:200px;border:1px solid rgba(255,255,255,.08);">
+          <img src="assets/hero-ak.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 12%;filter:saturate(1.5) contrast(1.1);">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.55));"></div>
+          <div style="position:absolute;top:12px;left:12px;font-family:'Oswald';font-size:9px;color:#fff;background:var(--accent,#FF2D2D);padding:4px 9px;letter-spacing:.06em;">会員へ</div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,.42);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;">▶</div>
+        </div>
+        <div style="text-align:left;margin-top:14px;"><div style="font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:17px;color:#fff;line-height:1.5;">ようこそ、AK ENLIGHTMENT CLUB へ。</div><p style="margin:8px 0 0;font-size:12px;line-height:1.9;color:#cfcfcf;">何度でも這い上がる。その入口に、あなたが立ったことが嬉しい。 ── AK-69</p></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div style="padding:24px 22px 8px;">
+        <div style="position:relative;border:1.5px solid var(--line,rgba(255,45,45,.4));overflow:hidden;background:linear-gradient(135deg,#1a0c0c,#0a0a0a);">
+          <div style="height:7px;background:repeating-linear-gradient(45deg, var(--accent,#FF2D2D) 0 9px, #111 9px 18px);"></div>
+          <div style="padding:18px 18px 20px;">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+              <img src="assets/hero-ak.jpg" alt="AK-69" style="width:62px;height:62px;flex:none;border-radius:50%;object-fit:cover;object-position:50% 14%;border:2px solid var(--accent,#FF2D2D);filter:saturate(1.6) contrast(1.1);">
+              <div><div style="font-family:'Oswald';font-size:8.5px;letter-spacing:.24em;color:var(--accent,#FF2D2D);">PROFILE</div><div style="font-family:'Anton';font-size:24px;color:#fff;line-height:1;margin-top:4px;">AK-69</div><div style="font-size:10px;color:#cfcfcf;margin-top:4px;">ラッパー ／ AK LIFE STUDIO 主宰</div></div>
+            </div>
+            <p style="margin:0 0 14px;font-size:11.5px;line-height:1.9;color:#cfcfcf;">名古屋から這い上がり、日本語ラップシーンの頂点を走り続けるラッパー。武道館・アリーナを制覇しながら、成り上がりの哲学とハングリー精神を発信。「何度でも這い上がれ」を体現し、次世代へ人生の学びを注いでいる。</p>
+            <div style="display:flex;flex-direction:column;gap:1px;">
+              <sc-for list="{{ onbProfile }}" as="pf" hint-placeholder-count="5">
+                <div style="display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid rgba(255,255,255,.07);">
+                  <div style="flex:none;width:54px;font-family:'Oswald';font-size:9.5px;letter-spacing:.04em;color:#fff;background:var(--accent,#FF2D2D);text-align:center;padding:4px 0;">{{ pf.k }}</div>
+                  <div style="flex:1;font-size:11px;line-height:1.6;color:#cfcfcf;padding-top:2px;">{{ pf.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:8px;color:#666;margin-top:12px;line-height:1.5;">※ 経歴は世界観を表現したイメージです。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="padding:8px 22px 10px;">
+        <div onClick="{{ closeOnb }}" style="cursor:pointer;text-align:center;font-family:'Oswald';font-weight:700;font-size:15px;letter-spacing:.1em;color:#fff;background:var(--accent,#FF2D2D);padding:18px;box-shadow:0 12px 32px var(--glow,rgba(255,45,45,.5));">さっそく始める</div>
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- tone switcher -->
+  <div style="position:fixed;z-index:70;left:max(14px, calc(50% - 206px));bottom:86px;display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:0;padding:6px 9px;">
+    <span style="font-family:'Oswald';font-size:8px;letter-spacing:.12em;color:#fff;padding-left:3px;">TONE</span>
+    <div onClick="{{ setRed }}" title="STREET RED" style="width:16px;height:16px;border-radius:50%;background:#FF2D2D;cursor:pointer;border:2px solid {{ ringRed }};"></div>
+    <div onClick="{{ setGold }}" title="VIP GOLD" style="width:16px;height:16px;border-radius:50%;background:#E6B84C;cursor:pointer;border:2px solid {{ ringGold }};"></div>
+    <div onClick="{{ setIce }}" title="NEON ICE" style="width:16px;height:16px;border-radius:50%;background:#2BE0FF;cursor:pointer;border:2px solid {{ ringIce }};"></div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#070707"/>
+    <g transform="translate(50 52)">
+      <rect x="-21" y="-21" width="42" height="42" rx="3" fill="none" stroke="#FF2D2D" stroke-width="3" transform="rotate(45)"/>
+      <text x="0" y="9" font-family="Arial Black, sans-serif" font-weight="900" font-size="26" fill="#fff" text-anchor="middle">AK</text>
+    </g>
+  </svg>
+</template>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900},&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;RED&quot;,&quot;GOLD&quot;,&quot;ICE&quot;],&quot;default&quot;:&quot;RED&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { tone: null, di: 0, coachOpen: false, menuOpen: false, introDone: false, onbOpen: false, vw: 440 };
+
+  componentDidMount() {
+    this._introT = setTimeout(() => this.setState({ introDone: true }), 1600);
+    this._onResize = () => this.setState({ vw: window.innerWidth });
+    this._onResize();
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount() { clearTimeout(this._introT); window.removeEventListener('resize', this._onResize); }
+
+  tones = {
+    RED:  '--accent:#FF2D2D;--glow:rgba(255,45,45,.55);--soft:rgba(255,45,45,.13);--line:rgba(255,45,45,.4);',
+    GOLD: '--accent:#E6B84C;--glow:rgba(230,184,76,.5);--soft:rgba(230,184,76,.13);--line:rgba(230,184,76,.42);',
+    ICE:  '--accent:#2BE0FF;--glow:rgba(43,224,255,.5);--soft:rgba(43,224,255,.13);--line:rgba(43,224,255,.42);',
+  };
+
+  words = [
+    '迷ったら、難しい方を選べ。そこに本物がある。',
+    '今日のお前は、昨日のお前を超えてるか。',
+    '言い訳は無料、行動は財産だ。',
+    '負けたって、そこで終わりじゃない。次のビートは、また鳴る。',
+    '本物は、誰も見てない時間で決まる。',
+    'やらない後悔より、やった痛みを選べ。',
+  ];
+
+  renderVals() {
+    const tone = this.state.tone || this.props.tone || 'RED';
+    const ring = (t) => tone === t ? '#fff' : 'transparent';
+    const A = 'var(--accent,#FF2D2D)', L = 'var(--line,rgba(255,45,45,.4))', S = 'var(--soft,rgba(255,45,45,.12))';
+
+    const conditions = [
+      { label:'お金', pct:58 }, { label:'住まい', pct:80 }, { label:'万が一', pct:46 },
+      { label:'老後', pct:41 }, { label:'災害', pct:52 }, { label:'健康', pct:64 },
+    ];
+
+    return {
+      rootStyle: this.tones[tone],
+      frameZoom: Math.min(1, (this.state.vw || 440) / 440),
+      setRed: () => this.setState({ tone:'RED' }),
+      setGold: () => this.setState({ tone:'GOLD' }),
+      setIce: () => this.setState({ tone:'ICE' }),
+      ringRed: ring('RED'), ringGold: ring('GOLD'), ringIce: ring('ICE'),
+
+      conditions,
+      introActive: !this.state.introDone,
+
+      streak: 18,
+
+      dailyWord: this.words[this.state.di % this.words.length],
+      nextWord: () => this.setState(s => ({ di: s.di + 1 })),
+
+      coachOpen: this.state.coachOpen,
+      openCoach: () => this.setState({ coachOpen: true }),
+      closeCoach: () => this.setState({ coachOpen: false }),
+
+      menuOpen: this.state.menuOpen,
+      openMenu: () => this.setState({ menuOpen: true }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+
+      onbOpen: this.state.onbOpen,
+      openOnb: () => this.setState({ onbOpen: true }),
+      closeOnb: () => this.setState({ onbOpen: false }),
+      onbMarket: [
+        { name:'【凜】うるおい成分配合クリーム 50g☆', price:'¥1,000', off:'86%OFF', c1:'#fff', c2:'#f0f0f0', img:'assets/mk-cream.jpg' },
+        { name:'【Life-do.Plus】冷爽ボディシート 30枚入☆', price:'¥150', off:'17%OFF', c1:'#fff', c2:'#f0f0f0', img:'assets/mk-sheet.jpg' },
+        { name:'アサヒ おいしい水 天然水 富士山 PET 600ml ×48本', price:'¥2,634', off:'68%OFF', c1:'#fff', c2:'#f0f0f0', img:'assets/mk-water.jpg' },
+      ].map(mk => ({ ...mk, imgEl: mk.img ? React.createElement('img', { src:mk.img, alt:mk.name, style:{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain', background:'#fff' } }) : null })),
+      onbProfile: [
+        { k:'現役', v:'日本語ラップシーンの頂点を走り続ける' },
+        { k:'軌跡', v:'名古屋から這い上がり、武道館・アリーナを制覇' },
+        { k:'発信', v:'成り上がりの哲学・覚悟・ハングリー精神を伝える' },
+        { k:'理念', v:'「何度でも這い上がれ」を体現する' },
+        { k:'肩書', v:'人生支援文化の創造に PHOENIX のごとく注ぐ' },
+      ],
+      menuLinks: [
+        { no:'', label:'ホーム', en:'HOME', href:'#home' },
+        { no:'01', label:'今日のメニュー', en:'VERSE 01 ・ MENU', href:'#menu' },
+        { no:'02', label:'人生を整える', en:'VERSE 02 ・ REALIZE CLUB', href:'#club' },
+        { no:'03', label:'コンディション診断', en:'VERSE 03 ・ CHECK', href:'#check' },
+        { no:'04', label:'3分の計量', en:'VERSE 04 ・ DIAGNOSIS', href:'#diagnose' },
+        { no:'05', label:'学びプログラム', en:'VERSE 05 ・ STUDIO', href:'#train' },
+        { no:'06', label:'特典映像', en:'VERSE 06 ・ BONUS', href:'#bonus' },
+        { no:'07', label:'イベント・トークライブ', en:'VERSE 07 ・ EVENTS', href:'#events' },
+        { no:'08', label:'社会貢献プロジェクト', en:'VERSE 08 ・ IMPACT', href:'#impact' },
+        { no:'09', label:'会員限定ショップ', en:'VERSE 09 ・ STORE', href:'#shop' },
+        { no:'10', label:'階級とバッジ', en:'VERSE 10 ・ RANK', href:'#rank' },
+        { no:'★', label:'信条', en:'FINAL VERSE ・ CREED', href:'#creed' },
+      ],
+
+      navItems: [
+        { label:'HOME', icon:'⌂', href:'#home' },
+        { label:'学び', icon:'▶', href:'#train' },
+        { label:'CLUB', icon:'✦', href:'#club' },
+        { label:'RANK', icon:'♦', href:'#rank' },
+        { label:'STORE', icon:'▣', href:'#shop' },
+      ],
+
+      missions: [
+        { title:'成功哲学を3本受講', state:'2 / 3', stcol:A, sub:'あと1本で HUSTLER を維持', reward:'ハングリーバッジ', border:L, bg:S },
+        { title:'人生診断を完了', state:'未着手', stcol:'#fff', sub:'コンディションを見える化する', reward:'HUSTLER 昇格', border:'rgba(255,255,255,.09)', bg:'rgba(255,255,255,.02)' },
+        { title:'ライフメイク設計書を作成', state:'未着手', stcol:'#fff', sub:'未来を整える第一歩', reward:'ライフメイク実践バッジ', border:'rgba(255,255,255,.09)', bg:'rgba(255,255,255,.02)' },
+      ],
+
+      realizeGrid: [
+        { icon:'assets/ic-waveform.png', title:'性格波形診断', sub:'自分のタイプ' },
+        { icon:'assets/ic-phoenix.png', title:'AK MARKET', sub:'日用品最大90%OFF' },
+        { icon:'assets/ic-book.png', title:'学習コンテンツ', sub:'人生100年時代の生き方' },
+        { icon:'assets/ic-roadmap.png', title:'人生設計コンテンツ', sub:'未来を設計する' },
+        { icon:'assets/ic-ai.png', title:'AI69に相談', sub:'悩みを整理' },
+        { icon:'assets/ic-desk.png', title:'人生相談窓口', sub:'専門家へつなぐ' },
+      ].map(g => ({ ...g, iconEl: React.createElement('img', { src:g.icon, alt:g.title, style:{ width:62, height:62, display:'block', marginBottom:9, filter:'contrast(1.18) saturate(1.35) brightness(1.06)' } }) })),
+
+      sixAxis: [
+        { label:'お金', pct:58, op:.9 },
+        { label:'住まい', pct:80, op:1 },
+        { label:'万が一', pct:46, op:.75 },
+        { label:'老後', pct:41, op:.7 },
+        { label:'災害', pct:52, op:.82 },
+        { label:'健康', pct:64, op:.92 },
+      ],
+
+      programs: [
+        { n:'哲', title:'成功哲学', sub:'何度でも這い上がる人生哲学', cta:'学ぶ' },
+        { n:'営', title:'ビジネス理念', sub:'人を動かすビジネス理念', cta:'見る' },
+        { n:'育', title:'仲間育成', sub:'本物の仲間を育てる言葉', cta:'体験する' },
+        { n:'勝', title:'勝負哲学', sub:'勝負どころで折れない思考法', cta:'読む' },
+        { n:'設', title:'人生設計ワーク', sub:'学びを人生設計に変える', cta:'設計する' },
+      ],
+
+      perks: [
+        { tag:'独占生中継', len:'7:00', title:'THE ENLIGHTENMENT IN BUDOKAN', badge:'ハングリーバッジ', c1:'#3a0e0e', c2:'#0a0a0a', img:'assets/perk-1.jfif' },
+        { tag:'MY NAME IS', len:'10:00', title:'未来は自分で創るもの。', badge:'リリックバッジ', c1:'#1a1a24', c2:'#0a0a0a', img:'assets/perk-2.jfif' },
+        { tag:'インタビュー', len:'6:00', title:'成り上がりの全て、語ります', badge:'育成者バッジ', c1:'#241616', c2:'#0a0a0a' },
+      ].map(pv => ({ ...pv, imgEl: pv.img ? React.createElement('img', { src:pv.img, alt:pv.title, style:{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' } }) : null })),
+
+      events: [
+        { title:'トークライブ｜人生の第2ステージの作り方', when:'2026.07.12 (土) ・ 東京 有楽町', cta:'申し込む' },
+        { title:'公開制作座談会｜音楽と経営', when:'2026.06.28 (日) 20:00〜', cta:'予約する' },
+        { title:'個別面談｜ライフメイクプランナー', when:'オンライン ・ 随時受付', cta:'相談を予約' },
+      ],
+
+      products: [
+        { tag:'APPAREL', name:'REALIZE CLUB フーディ', price:'¥14,800', c1:'#1a1a1a', c2:'#0c0c0c', img:'assets/prod-hoodie.jpg' },
+        { tag:'LIMITED', name:'RED MAGIC 69 サイン入りTシャツ', price:'¥8,800', c1:'#f2f2f2', c2:'#d8d8d8', img:'assets/prod-tshirt.jpg' },
+        { tag:'TICKET', name:'VIPイベント 入場権', price:'¥22,000', c1:'#1c1c28', c2:'#0c0c0c', img:'assets/vip-event.webp' },
+        { tag:'COLLAB', name:'コラボ シルバーチェーン', price:'¥38,000', c1:'#23201a', c2:'#0c0c0c', img:'assets/chain-product.jpg' },
+      ].map(p => ({ ...p, imgEl: p.img ? React.createElement('img', { src:p.img, alt:p.name, style:{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' } }) : null })),
+
+      rankBelts: (() => {
+        const dim = '#fff';
+        return [
+          { icon:'✓', name:'DAY ONE', cond:'登録直後', state:'達成', col:dim, border:'rgba(255,255,255,.07)', bg:'rgba(255,255,255,.015)' },
+          { icon:'✓', name:'SOLDIER', cond:'成功哲学を3本受講', state:'達成', col:dim, border:'rgba(255,255,255,.07)', bg:'rgba(255,255,255,.015)' },
+          { icon:'🔥', name:'HUSTLER', cond:'人生診断を完了', state:'現在', col:'var(--accent,#FF2D2D)', border:'var(--line,rgba(255,45,45,.4))', bg:'var(--soft,rgba(255,45,45,.12))' },
+          { icon:'🔒', name:'BOSS', cond:'ライフメイク設計書を作成', state:'未開放', col:dim, border:'rgba(255,255,255,.07)', bg:'rgba(255,255,255,.015)' },
+          { icon:'🔒', name:'KINGPIN', cond:'学び受講＋社会貢献に参加', state:'未開放', col:dim, border:'rgba(255,255,255,.07)', bg:'rgba(255,255,255,.015)' },
+          { icon:'🔒', name:'LEGEND', cond:'学び・診断・設計・社会貢献を継続', state:'未開放', col:dim, border:'rgba(255,255,255,.07)', bg:'rgba(255,255,255,.015)' },
+        ];
+      })(),
+
+      badges: (() => {
+        const got = (icon,name) => ({ icon, name, op:1, col:A, bg:S, border:L });
+        const lock = (name) => ({ icon:'☆', name, op:.4, col:'#fff', bg:'rgba(255,255,255,.03)', border:'rgba(255,255,255,.08)' });
+        return [ got('★','成功哲学'), got('★','仲間育成'), got('★','復活力'), lock('勝負哲学'),
+                 lock('AK MBA'), lock('人を育てる'), lock('夢を設計'), lock('ライフメイク') ];
+      })(),
+
+      creed: [
+        { n:'1', text:'私は、人生設計が当たり前にできる社会を信じます。' },
+        { n:'2', text:'私は、次世代に人生を学ぶ場所を提供します。' },
+        { n:'3', text:'私は、影響力を自分のためだけでなく、未来のために使います。' },
+        { n:'4', text:'私は、REALIZE の思想に共感し、人生支援文化の創造に参加します。' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
